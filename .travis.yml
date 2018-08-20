@@ -6,7 +6,7 @@ env:
     - CHANGE_MINIKUBE_NONE_USER=true
     - K8S_VERSION="v1.10.0"
     - MINIKUBE_VERSION="v0.28.2"
-    - https://travis-ci.com/rimusz/charts-testing-travisci="v1.0.3"
+    - CHART_TESTING_VERSION="v1.0.3"
 
 before_script:
 # Download kubectl, which is a requirement for using minikube.
@@ -28,7 +28,7 @@ before_script:
 
 script:
 # Run charts-testing
-- docker run --rm -e CHART_DIRS='stable' -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${https://travis-ci.com/rimusz/charts-testing-travisci} chart_test.sh --config /root/.kube/config
+- docker run --rm -e CHART_DIRS='stable' -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --config /root/.kube/config
 
 notifications:
   email: false
