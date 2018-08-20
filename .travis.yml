@@ -25,6 +25,7 @@ before_script:
 - kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 #
 - pwd
+- ls -alh ../../..
 - ls -alh ../..
 - ls -alh ../
 
