@@ -18,20 +18,14 @@ before_script:
 - sudo -E minikube start --vm-driver=none --bootstrapper=localkube --kubernetes-version=${K8S_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC
 # Fix the kubectl context, as it's often stale.
 - minikube update-context
-- kubectl config view
 # Wait for Kubernetes to be up and ready.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 # Create cluster admin
 - kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
-#
-- pwd
-- ls -alh ../../../.kube
-- ls -alh ../..
-- ls -alh ../
 
 script:
 # Run charts-testing
-- docker run --rm -e CHART_DIRS='stable' -v "/home/travis/.kube:/kube" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --config /kube/config
+- docker run --rm -e CHART_DIRS='stable' -v "/home/travis:/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --config /workdir/.kube/config
 
 notifications:
   email: false
