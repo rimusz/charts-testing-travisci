@@ -27,8 +27,10 @@ before_script:
 - kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 # Set RABC rules for tiller
 - kubectl -n kube-system create sa tiller && kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-# Install tiller
+# Create an admin cluster user for minikube
 - kubectl create clusterrolebinding "cluster-admin-minikube" --clusterrole=cluster-admin --user="minikube"
+# Install tiller
+- helm init --service-account tiller
 
 script:
 # Run charts-testing
