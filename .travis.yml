@@ -31,7 +31,7 @@ before_script:
 
 script:
 # Run charts-testing
-- docker run --rm -e CHART_DIRS='stable' -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --config /workdir/.testenv
+- docker run --rm -e CHART_DIRS='stable' -v "/home/travis/.kube:/kube" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --config /kube/config
 
 notifications:
   email: false
