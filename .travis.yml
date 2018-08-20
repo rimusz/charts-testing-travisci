@@ -9,6 +9,16 @@ env:
     - CHART_TESTING_VERSION="v1.0.3"
     - HELM_VERSION="v2.9.1"
 
+# Some initial setup
+before_install:
+- sudo apt-get update
+- sudo apt-get install -y socat util-linux
+
+# Build the needed nsenter tool for Ubuntu 14.04 (current tarvisCI build VM version)
+- sudo docker build -t ubuntu-util-linux:1 util-linux/
+- sudo docker run --rm -v $(pwd):/tmp/files ubuntu-util-linux:1 /bin/sh -c "cp -fv /util-linux/nsenter /tmp/files/"
+- sudo mv -fv nsenter /usr/local/bin/
+
 before_script:
 # Download kubectl, which is a requirement for using minikube.
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
