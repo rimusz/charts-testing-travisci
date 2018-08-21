@@ -7,3 +7,7 @@ artifactory:
 postgresql:
   persistence:
     enabled: false
+
+nginx:
+  service:
+    type: NodePort
