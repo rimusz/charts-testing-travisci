@@ -1,0 +1,13 @@
+# CI values for Artifactory
+
+artifactory:
+  persistence:
+    enabled: false
+
+postgresql:
+  persistence:
+    enabled: false
+
+nginx:
+  service:
+    type: NodePort
