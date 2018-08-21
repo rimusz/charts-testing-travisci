@@ -14,9 +14,8 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install -y socat util-linux
 
-# Build the needed nsenter tool for Ubuntu 14.04 (current tarvisCI build VM version)
-- sudo docker build -t ubuntu-util-linux:1 util-linux/
-- sudo docker run --rm -v $(pwd):/tmp/files ubuntu-util-linux:1 /bin/sh -c "cp -fv /util-linux/nsenter /tmp/files/"
+# Copy nsenter tool for Ubuntu 14.04 (current travisCI build VM version)
+- sudo docker run --rm -v $(pwd):/tmp/files jpetazzo/nsenter /bin/sh -c "cp -fv /util-linux/nsenter /tmp/files/"
 - sudo mv -fv nsenter /usr/local/bin/
 
 before_script:
