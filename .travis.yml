@@ -32,6 +32,9 @@ before_script:
 - minikube update-context
 # Wait for Kubernetes to be up and ready.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+
+script:
+- kubectl cluster-info
 # Create cluster admin
 - kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 # Set RABC rules for tiller
@@ -40,8 +43,6 @@ before_script:
 #- kubectl create clusterrolebinding "cluster-admin-minikube" --clusterrole=cluster-admin --user="minikube"
 # Install tiller
 - helm init --service-account tiller
-
-script:
 # Run charts-testing
 - docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS='stable' -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh
 
