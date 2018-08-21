@@ -14,7 +14,7 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install -y socat util-linux
 
-# Copy nsenter tool for Ubuntu 14.04 (current travisCI build VM version
+# Copy nsenter tool for Ubuntu 14.04 (current travisCI build VM version)
 - sudo docker run --rm -v $(pwd):/target jpetazzo/nsenter
 - sudo mv -fv nsenter /usr/local/bin/
 
@@ -42,7 +42,7 @@ script:
 # Install tiller
 - helm init --service-account tiller
 # Run charts-testing
-- docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS="stable" -e TIMEOUT="500" -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh
+- docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS="stable" -e TIMEOUT="1000" -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh
 
 notifications:
   email: false
