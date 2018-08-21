@@ -39,12 +39,10 @@ script:
 - kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 # Set RABC rules for tiller
 - kubectl -n kube-system create sa tiller && kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-# Create an admin cluster user for minikube
-#- kubectl create clusterrolebinding "cluster-admin-minikube" --clusterrole=cluster-admin --user="minikube"
 # Install tiller
 - helm init --service-account tiller
 # Run charts-testing
-- docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS='stable' -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh
+- docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS="stable" -e TIMEOUT="500" -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh
 
 notifications:
   email: false
