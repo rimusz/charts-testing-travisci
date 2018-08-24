@@ -1,37 +1,41 @@
-sudo: required
+sudo: false
+
+# Cache Gcloud SDK between commands
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk/"
 
 env:
   global:
-    - K8S_VERSION="v1.10.6"
-    - CHART_TESTING_VERSION="v1.0.3"
-    - HELM_VERSION="v2.9.1"
+  - CHART_TESTING_VERSION="v1.0.3"
 
 before_script:
-# Some initial setup
-- sudo apt-get update
-- sudo apt-get install -y socat util-linux
-# Copy nsenter tool for Ubuntu 14.04 (current travisCI build VM version)
-- docker run --rm -v $(pwd):/target jpetazzo/nsenter
-- sudo mv -fv nsenter /usr/local/bin/
-# Pull chart-testing docker image
-- docker pull gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} || travis_terminate 1
+# Decrypt the credentials
+- openssl aes-256-cbc -K $encrypted_f155bcef980a_key -iv $encrypted_f155bcef980a_iv -in credentials.tar.gz.enc -out credentials.tar.gz -d
+
+# If the SDK is not already cached, download it and unpack it
+- if [ ! -d ${HOME}/google-cloud-sdk ]; then
+     curl https://sdk.cloud.google.com | bash;
+  fi
+- tar -xzf credentials.tar.gz
 
 script:
+- docker pull gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} || travis_terminate 1
 - echo "Run local charts-testing with linting only"
 - docker run --rm -e CHART_DIRS="stable" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install || travis_terminate 1
-#
-- echo "Download kubectl"
-- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ || travis_terminate 1
-#
-- echo "Scale up GKE cluster"
 
-- echo "Wait for Kubernetes to be up and ready"
-#- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
-- echo "Run remote charts-testing with install only"
-#- docker run --rm -e KUBECONFIG="/home/travis/.kube/config" -e CHART_DIRS="stable" -v "/home:/home" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-lint
+before_deploy:
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud --quiet version
+  - gcloud --quiet components update
+  - gcloud --quiet components beta update
+  - gcloud --quiet components update kubectl
 
-after_script:
-- echo "Scale down GKE cluster"
+deploy:
+  - provider: script
+    script: ./run_test_gke.sh || travis_terminate 1
+    skip_cleanup: true
 
 notifications:
   email: false
