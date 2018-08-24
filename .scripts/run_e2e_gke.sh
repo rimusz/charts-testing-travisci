@@ -15,7 +15,7 @@ main() {
     git fetch k8s master
 
     local config_container_id
-    config_container_id=$(docker run -ti -d -v "$GOOGLE_APPLICATION_CREDENTIALS:/gcloud-service-key.json" -v "$REPO_ROOT:/workdir" \
+    config_container_id=$(docker run -ti -d -v "${PWD}/gcloud-service-key.json:/gcloud-service-key.json" -v "$REPO_ROOT:/workdir" \
         "$IMAGE_REPOSITORY:$IMAGE_TAG" cat)
 
     # shellcheck disable=SC2064
