@@ -1,10 +1,5 @@
 sudo: false
 
-# Cache Gcloud SDK between commands
-cache:
-  directories:
-    - "$HOME/google-cloud-sdk/"
-
 env:
   global:
   - CHART_TESTING_VERSION="v1.0.3"
@@ -23,7 +18,7 @@ before_script:
 
 script:
 - echo "Run charts-testing with install only on GKE"
-- ./.scripts/run_e2e_test_gke.sh
+- ./.scripts/run_e2e_gke.sh
 
 notifications:
   email: false
