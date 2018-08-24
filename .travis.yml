@@ -4,7 +4,7 @@ env:
   global:
   - CHART_TESTING_VERSION="v1.0.3"
   - TEST_IMAGE_TAG="v2.0.3"
-  - CHARTS_REPO="https://github.com/jfrog/charts"
+  - CHARTS_REPO="https://github.com/rimusz/charts-testing-travisci"
 
 before_install:
 # Decrypt the credentials
