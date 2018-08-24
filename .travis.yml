@@ -36,6 +36,8 @@ deploy:
   - provider: script
     script: ./run_test_gke.sh || travis_terminate 1
     skip_cleanup: true
+    on:
+      all_branches: true
 
 notifications:
   email: false
