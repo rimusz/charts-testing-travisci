@@ -2,10 +2,10 @@
 
 set -e
 
-source ${HOME}/cluster
+source ${PWD}/cluster
 
 # Set GKE cluster access
-gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+gcloud auth activate-service-account --key-file ${PWD}/gcloud-service-key.json
 gcloud --quiet config set project $PROJECT_NAME
 gcloud --quiet config set compute/zone $CLOUDSDK_COMPUTE_ZONE
 gcloud --quiet config set container/cluster $CLUSTER_NAME
