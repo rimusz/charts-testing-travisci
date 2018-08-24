@@ -9,7 +9,7 @@ env:
   global:
   - CHART_TESTING_VERSION="v1.0.3"
 
-before_script:
+before_install:
 # Decrypt the credentials
 - openssl aes-256-cbc -K $encrypted_f155bcef980a_key -iv $encrypted_f155bcef980a_iv -in credentials.tar.gz.enc -out credentials.tar.gz -d
 
@@ -19,24 +19,20 @@ before_script:
   fi
 - tar -xzf credentials.tar.gz
 
-script:
+before_script:
 - docker pull gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} || travis_terminate 1
 - echo "Run local charts-testing with linting only"
 - docker run --rm -e CHART_DIRS="stable" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install || travis_terminate 1
 
-before_deploy:
-  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
-  - source /home/travis/google-cloud-sdk/path.bash.inc
-  - gcloud --quiet version
-  - gcloud --quiet components update
-  - gcloud --quiet components update kubectl
+install:
+- if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+- source /home/travis/google-cloud-sdk/path.bash.inc
+- gcloud --quiet version
+- gcloud --quiet components update
+- gcloud --quiet components update kubectl
 
-deploy:
-  - provider: script
-    script: ./run_test_gke.sh || travis_terminate 1
-    skip_cleanup: true
-    on:
-      all_branches: true
+script:
+- ./.scripts/run_test_gke.sh || travis_terminate 1
 
 notifications:
   email: false
