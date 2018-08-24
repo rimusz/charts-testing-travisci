@@ -20,7 +20,7 @@ before_script:
 - docker run --rm -e CHART_DIRS="stable" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install || travis_terminate 1
 # If the SDK is not already cached, download it and unpack it
 - if [ ! -d ${HOME}/google-cloud-sdk ]; then
-     curl https://sdk.cloud.google.com | bash;
+     curl https://sdk.cloud.google.com | bash &> /dev/null;
   fi
 
 script:
