@@ -17,7 +17,7 @@ before_script:
 - docker run --rm -e CHART_DIRS="stable" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install || travis_terminate 1
 
 script:
-- - docker pull gcr.io/kubernetes-charts-ci/test-image:${TEST_IMAGE_TAG} || travis_terminate 1
+- docker pull gcr.io/kubernetes-charts-ci/test-image:${TEST_IMAGE_TAG} || travis_terminate 1
 - echo "Run full charts-testing on GKE"
 - ./.scripts/run_e2e_gke.sh
 
