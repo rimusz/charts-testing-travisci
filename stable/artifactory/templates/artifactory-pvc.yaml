@@ -1,6 +1,6 @@
 {{- if and .Values.artifactory.persistence.enabled (not .Values.artifactory.persistence.existingClaim) -}}
 kind: PersistentVolumeClaim
-    apiVersion: v1
+apiVersion: v1
 metadata:
   name: {{ template "artifactory.fullname" . }}
   labels:
