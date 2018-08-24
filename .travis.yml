@@ -13,11 +13,11 @@ before_install:
 
 before_script:
 - docker pull gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} || travis_terminate 1
-- echo "Run local charts-testing with linting only"
+- echo "Run local linting charts-testing"
 - docker run --rm -e CHART_DIRS="stable" -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install || travis_terminate 1
 
 script:
-- echo "Run charts-testing with install only on GKE"
+- echo "Run full charts-testing on GKE"
 - ./.scripts/run_e2e_gke.sh
 
 notifications:
