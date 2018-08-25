@@ -23,7 +23,6 @@ main() {
 
     docker exec "$config_container_id" gcloud auth activate-service-account --key-file /gcloud-service-key.json
     docker exec "$config_container_id" gcloud container clusters get-credentials $CLUSTER_NAME --project $PROJECT_NAME --zone $CLOUDSDK_COMPUTE_ZONE
-    docker exec "$config_container_id" kubectl cluster-info
     docker exec "$config_container_id" chart_test.sh --config /workdir/test/.testenv
 
     echo "Done Testing!"
