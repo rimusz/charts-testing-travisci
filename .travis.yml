@@ -13,7 +13,10 @@ before_install:
 
 before_script:
 - echo "Run local linting charts-testing"
-- docker run --rm -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install --config /workdir/test/.testenv_local || travis_terminate 1
+- git remote add k8s ${CHARTS_REPO}
+- git fetch k8s master
+- docker run --rm -v "$(pwd):/workdir" --workdir /workdir gcr.io/kubernetes-charts-ci/chart-testing:${CHART_TESTING_VERSION} chart_test.sh --no-install --config /workdir/test/.testenv || travis_terminate 1
+- echo "Done Linting Testing!"
 
 script:
 - echo "Run full charts-testing on GKE"
