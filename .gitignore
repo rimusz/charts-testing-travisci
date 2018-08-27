@@ -17,3 +17,6 @@ creds
 
 # Chart dependencies
 **/charts/*.tgz
+
+#
+tmp
