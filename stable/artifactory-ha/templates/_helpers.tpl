@@ -3,21 +3,23 @@
 Expand the name of the chart.
 */}}
 {{- define "artifactory-ha.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 60 | trimSuffix "-" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 The primary node name
 */}}
 {{- define "artifactory-ha.primary.name" -}}
-{{- printf "%s-%s-primary" .Release.Name .Chart.Name | trunc 55 | trimSuffix "-" -}}
+{{- $name := .Release.Name | trunc 15 -}}
+{{- printf "%s-%s-primary" $name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 The member node name
 */}}
 {{- define "artifactory-ha.node.name" -}}
-{{- printf "%s-%s-member" .Release.Name .Chart.Name | trunc 55 | trimSuffix "-" -}}
+{- $name := .Release.Name | trunc 15 -}}
+{{- printf "%s-%s-member" $name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
