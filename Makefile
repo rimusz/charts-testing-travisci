@@ -4,6 +4,7 @@ CHARTS_REPO ?= https://github.com/rimusz/charts-testing-travisci
 
 .PHONY: lint
 lint:
+	helm lint stable/*
 	$(eval export CHART_TESTING_TAG)
 	$(eval export CHARTS_REPO)
 	test/lint-charts.sh
