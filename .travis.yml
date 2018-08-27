@@ -14,9 +14,9 @@ before_script:
 
 script:
 - echo "Run linting charts-testing linting"
-- ./test/lint_charts.sh || travis_terminate 1
+- ./test/lint-charts.sh || travis_terminate 1
 - echo "Run full charts-testing on GKE"
-- ./test/e2e_gke.sh || travis_terminate 1
+- ./test/e2e-gke.sh || travis_terminate 1
 
 notifications:
   email: false
