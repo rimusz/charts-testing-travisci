@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 
 services:
   - docker
@@ -18,6 +18,11 @@ before_install:
 before_script:
 - echo "Run linting charts-testing linting"
 - ./test/lint-charts.sh || travis_terminate 1
+- >
+  if cat tmp/lint.log | grep "No chart changes detected" > /dev/null; then
+      echo "Nothing to lint"
+      travis_terminate 0
+  fi
 
 script:
 - echo "Run full charts-testing on GKE"

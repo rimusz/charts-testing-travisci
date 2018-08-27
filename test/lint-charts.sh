@@ -16,12 +16,6 @@ main() {
     fi
     mkdir -p tmp
     docker run --rm -v "$(pwd):/workdir" --workdir /workdir "$IMAGE_REPOSITORY:$IMAGE_TAG" chart_test.sh --no-install --config /workdir/test/.testenv | tee tmp/lint.log
-    if cat tmp/lint.log | grep "No chart changes detected" > /dev/null; then
-      echo "Nothing to lint"
-      if [[ "${TRAVISCI_RUN}" = "true" ]]; then
-        echo "travis_terminate 0"
-      fi
-    fi
     echo "Done Linting!"
 }
 
