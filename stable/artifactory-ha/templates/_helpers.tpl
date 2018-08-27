@@ -10,14 +10,14 @@ Expand the name of the chart.
 The primary node name
 */}}
 {{- define "artifactory-ha.primary.name" -}}
-{{- printf "%s-%s-primary" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-primary" .Release.Name .Chart.Name | trunc 60 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 The member node name
 */}}
 {{- define "artifactory-ha.node.name" -}}
-{{- printf "%s-%s-member" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-member" .Release.Name .Chart.Name | trunc 60 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
