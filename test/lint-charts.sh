@@ -19,7 +19,7 @@ main() {
     if cat tmp/lint.log | grep "No chart changes detected" > /dev/null; then
       echo "Nothing to lint"
       if [[ "${TRAVISCI_RUN}" = "true" ]]; then
-        travis_terminate 0
+        echo "travis_terminate 0"
       fi
     fi
     echo "Done Linting!"
