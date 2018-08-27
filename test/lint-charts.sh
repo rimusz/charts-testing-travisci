@@ -9,8 +9,8 @@ readonly IMAGE_REPOSITORY="gcr.io/kubernetes-charts-ci/chart-testing"
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
 main() {
-    if git remote | grep k8s > /dev/null; then
-      echo "Remote k8s already exists"
+    if git remote | grep k8s; then
+      echo "Remote k8s already exists!"
     else
       git remote add k8s ${CHARTS_REPO}
     fi

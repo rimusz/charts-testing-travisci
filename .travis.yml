@@ -16,14 +16,14 @@ before_script:
 - tar -xzf credentials.tar.gz
 
 script:
-- echo "Run linting charts-testing linting"
+- echo "Run charts-testing linting!"
 - ./test/lint-charts.sh
 - >
   if cat tmp/lint.log | grep "No chart changes detected" > /dev/null; then
       echo "Nothing to lint, stopping TravisCI pipeline!"
       travis_terminate 0
   fi
-- echo "Run full charts-testing on GKE"
+- echo "Run full charts-testing on GKE!"
 - ./test/e2e-gke.sh
 
 notifications:
