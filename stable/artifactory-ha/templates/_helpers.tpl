@@ -18,7 +18,7 @@ The primary node name
 The member node name
 */}}
 {{- define "artifactory-ha.node.name" -}}
-{- $name := .Release.Name | trunc 15 -}}
+{{- $name := .Release.Name | trunc 15 -}}
 {{- printf "%s-%s-member" $name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
