@@ -10,9 +10,6 @@ env:
   - CHARTS_REPO="https://github.com/rimusz/charts-testing-travisci"
   - TRAVISCI_RUN="true"
 
-install:
-- travis_wait 30 mvn install
-
 before_script:
 # Decrypt the credentials
 - openssl aes-256-cbc -K $encrypted_b335e931294b_key -iv $encrypted_b335e931294b_iv -in credentials.tar.gz.enc -out credentials.tar.gz -d
@@ -27,6 +24,9 @@ script:
       travis_terminate 0
   fi
 - echo "Run full charts-testing on GKE!"
+# ping stdout every 9 minutes or Travis kills build
+# https://docs.travis-ci.com/user/common-build-problems/#Build-times-out-because-no-output-was-received
+- while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
 - ./test/e2e-gke.sh
 
 notifications:
