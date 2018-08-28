@@ -4,6 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+
 source ${PWD}/cluster
 
 readonly IMAGE_TAG=${TEST_IMAGE_TAG}
