@@ -1,4 +1,5 @@
 # Lint charts locally
+
 CHART_TESTING_TAG ?= v1.0.3
 CHARTS_REPO ?= https://github.com/rimusz/charts-testing-travisci
 
